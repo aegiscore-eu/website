@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aegis Core — L'IA sous le sceau du secret professionnel</title>
+<meta name="description" content="Aegis Core : appliance d'intelligence artificielle 100 % locale pour cabinets d'avocats. Aucune donnée ne quitte le cabinet. Registre d'audit probant. Conçu pour le RGPD et le règlement IA.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#06162d;
+    --ink-2:#1d222d;
+    --ink-3:#4a5261;
+    --paper:#f4f4f2;
+    --paper-2:#edece8;
+    --gold:#c9a227;
+    --navy:#2f4b6e;
+    --line:rgba(6,22,45,.14);
+    --serif:"Cormorant Garamond",Georgia,"Times New Roman",serif;
+    --sans:"Instrument Sans",-apple-system,"Segoe UI",sans-serif;
+    --ease-sig:cubic-bezier(.075,.82,.165,1);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
+  }
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    font-size:17px;
+    line-height:1.65;
+    opacity:0;
+    transition:opacity .5s ease;
+    -webkit-font-smoothing:antialiased;
+  }
+  body.reveal{opacity:1}
+  ::selection{background:var(--gold);color:var(--ink)}
+  a{color:inherit}
+
+  /* ---------- header ---------- */
+  header{
+    position:fixed;inset:0 0 auto 0;z-index:100;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:1.1rem clamp(1.25rem,4vw,3rem);
+    background:color-mix(in srgb,var(--paper) 88%,transparent);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+    transform:translateY(0);
+  }
+  header.out{animation:header_out .2s var(--ease-sig) both}
+  header.in{animation:header_in .4s var(--ease-sig) both}
+  @keyframes header_in{0%{transform:translateY(-100%)}100%{transform:translateY(0)}}
+  @keyframes header_out{0%{transform:translateY(0)}100%{transform:translateY(-100%)}}
+  .brand{display:flex;align-items:center;gap:.7rem;text-decoration:none}
+  .brand svg{width:34px;height:34px;border-radius:7px}
+  .brand .word{font-family:var(--serif);font-size:1.35rem;font-weight:600;letter-spacing:.02em}
+  .brand .word em{font-style:normal;color:var(--gold)}
+  nav{display:flex;align-items:center;gap:clamp(1rem,2.5vw,2.2rem)}
+  nav a{
+    text-decoration:none;font-size:.8rem;font-weight:500;
+    text-transform:uppercase;letter-spacing:.16em;color:var(--ink-3);
+    padding:.4rem 0;position:relative;transition:color .2s ease;
+  }
+  nav a::after{
+    content:"";position:absolute;left:0;bottom:0;height:1px;width:0;
+    background:var(--gold);transition:width .25s ease;
+  }
+  nav a:hover,nav a:focus-visible{color:var(--ink)}
+  nav a:hover::after,nav a:focus-visible::after{width:100%}
+  .lang{
+    display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;
+    font-size:.75rem;font-weight:600;letter-spacing:.12em;
+  }
+  .lang button{
+    border:0;background:transparent;color:var(--ink-3);cursor:pointer;
+    font:inherit;padding:.45rem .8rem;transition:background .2s ease,color .2s ease;
+  }
+  .lang button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+  .lang button:focus-visible{outline:2px solid var(--gold);outline-offset:-2px}
+  @media (max-width:760px){ nav a{display:none} }
+
+  /* ---------- layout primitives ---------- */
+  main{display:block}
+  section{padding:clamp(4.5rem,9vw,8.5rem) clamp(1.25rem,6vw,6rem)}
+  .wrap{max-width:72rem;margin:0 auto}
+  .eyebrow{
+    font-size:.78rem;font-weight:600;text-transform:uppercase;
+    letter-spacing:.22em;color:var(--gold);margin-bottom:1.4rem;
+    display:flex;align-items:center;gap:.8rem;
+  }
+  .eyebrow::before{content:"";width:2.2rem;height:1px;background:var(--gold)}
+  h1,h2{font-family:var(--serif);font-weight:500;line-height:1.08;letter-spacing:.005em}
+  h1{font-size:clamp(2.6rem,6.4vw,5.2rem)}
+  h2{font-size:clamp(2rem,4.2vw,3.4rem)}
+  h1 .g,h2 .g{color:var(--navy)}
+  .lead{font-size:clamp(1.05rem,1.6vw,1.25rem);color:var(--ink-3);max-width:38rem}
+
+  /* scroll reveal */
+  .rv{opacity:0;transform:translateY(1rem);transition:opacity .8s var(--ease-sig),transform .8s var(--ease-sig)}
+  .rv.on{opacity:1;transform:none}
+  .rv.d1{transition-delay:.08s}.rv.d2{transition-delay:.16s}.rv.d3{transition-delay:.24s}
+
+  /* ---------- hero ---------- */
+  .hero{
+    min-height:100dvh;display:flex;align-items:flex-end;
+    padding-top:8rem;padding-bottom:clamp(3rem,6vw,5rem);
+    position:relative;
+  }
+  .hero .side{
+    position:absolute;right:clamp(.6rem,2vw,1.6rem);top:50%;
+    writing-mode:vertical-rl;transform:translateY(-50%);
+    font-size:.72rem;letter-spacing:.34em;text-transform:uppercase;color:var(--ink-3);
+  }
+  .hero-grid{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,3fr);gap:3rem;align-items:end;width:100%}
+  .hero p.lead{margin-top:1.8rem}
+  .cta-row{display:flex;flex-wrap:wrap;gap:1.4rem;align-items:center;margin-top:2.6rem}
+  .btn{
+    display:inline-block;text-decoration:none;font-weight:600;font-size:.92rem;
+    letter-spacing:.06em;padding:1rem 2rem;border-radius:2px;cursor:pointer;
+    border:1px solid var(--ink);transition:background .25s ease,color .25s ease;
+  }
+  .btn.solid{background:var(--ink);color:var(--paper)}
+  .btn.solid:hover,.btn.solid:focus-visible{background:var(--navy);border-color:var(--navy)}
+  .btn.ghost{background:transparent;color:var(--ink)}
+  .btn.ghost:hover,.btn.ghost:focus-visible{background:var(--ink);color:var(--paper)}
+  .btn:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+  .hero-meta{
+    border-left:1px solid var(--line);padding-left:1.6rem;
+    display:flex;flex-direction:column;gap:1.15rem;font-size:.86rem;color:var(--ink-3);
+  }
+  .hero-meta b{display:block;font-family:var(--serif);font-size:1.5rem;font-weight:600;color:var(--ink);line-height:1.1}
+  .hero-meta span{letter-spacing:.04em}
+  @media (max-width:900px){
+    .hero-grid{grid-template-columns:1fr}
+    .hero-meta{border-left:0;border-top:1px solid var(--line);padding:1.6rem 0 0;flex-direction:row;flex-wrap:wrap;gap:1.5rem 2.5rem}
+    .hero .side{display:none}
+  }
+
+  /* ---------- ledger divider ---------- */
+  .ledger{display:flex;align-items:center;gap:.9rem;padding:0 clamp(1.25rem,6vw,6rem);color:var(--ink-3)}
+  .ledger .rule{flex:1;height:1px;background:var(--line)}
+  .ledger code{font-family:ui-monospace,"SF Mono",Menlo,monospace;font-size:.72rem;letter-spacing:.08em;white-space:nowrap}
+  .ledger .tick{width:7px;height:7px;background:var(--gold);transform:rotate(45deg);flex:none}
+
+  /* ---------- problem ---------- */
+  .prob-list{margin-top:3.2rem;border-top:1px solid var(--line)}
+  .prob{
+    display:grid;grid-template-columns:5rem minmax(0,1fr) minmax(0,1.2fr);
+    gap:2rem;padding:2.2rem 0;border-bottom:1px solid var(--line);align-items:baseline;
+  }
+  .prob .num{font-family:var(--serif);font-size:1.9rem;color:var(--gold);font-weight:500}
+  .prob h3{font-family:var(--serif);font-size:1.55rem;font-weight:600;line-height:1.2}
+  .prob p{color:var(--ink-3);font-size:1rem}
+  @media (max-width:760px){.prob{grid-template-columns:1fr;gap:.5rem}}
+
+  /* ---------- product ---------- */
+  .product{background:var(--ink);color:var(--paper)}
+  .product .eyebrow{color:var(--gold)}
+  .product h2{color:var(--paper)}
+  .product .lead{color:#b9c2cf}
+  .steps{margin-top:3.4rem;display:grid;grid-template-columns:repeat(3,1fr);gap:2.6rem}
+  .step{border-top:1px solid rgba(244,244,242,.2);padding-top:1.4rem}
+  .step .k{font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:600}
+  .step h3{font-family:var(--serif);font-size:1.5rem;font-weight:600;margin:.7rem 0 .6rem}
+  .step p{color:#b9c2cf;font-size:.98rem}
+  .specs{
+    margin-top:3.6rem;display:flex;flex-wrap:wrap;gap:0;
+    border:1px solid rgba(244,244,242,.18);
+  }
+  .specs div{
+    flex:1 1 10rem;padding:1.3rem 1.6rem;border-right:1px solid rgba(244,244,242,.18);
+  }
+  .specs div:last-child{border-right:0}
+  .specs b{display:block;font-family:var(--serif);font-size:1.45rem;font-weight:600;color:var(--paper)}
+  .specs span{font-size:.8rem;letter-spacing:.08em;color:#8d97a6;text-transform:uppercase}
+  @media (max-width:860px){.steps{grid-template-columns:1fr}.specs div{border-right:0;border-bottom:1px solid rgba(244,244,242,.18)}.specs div:last-child{border-bottom:0}}
+
+  /* ---------- console screenshot ---------- */
+  .shot{margin-top:3.6rem}
+  .shot .frame{
+    border:1px solid rgba(244,244,242,.22);border-radius:10px;overflow:hidden;
+    background:var(--paper);box-shadow:0 24px 60px rgba(0,0,0,.35);
+  }
+  .shot .bar{
+    display:flex;align-items:center;gap:.55rem;padding:.65rem 1rem;
+    background:#e8e7e2;border-bottom:1px solid var(--line);
+  }
+  .shot .bar i{width:10px;height:10px;border-radius:50%;background:#c4c2ba;flex:none}
+  .shot .url{
+    margin-left:.5rem;flex:1;font-family:ui-monospace,"SF Mono",Menlo,monospace;
+    font-size:.74rem;color:var(--ink-3);background:#fff;border:1px solid var(--line);
+    border-radius:5px;padding:.28rem .7rem;white-space:nowrap;overflow:hidden;
+  }
+  .shot img{display:block;width:100%;height:auto}
+  .shot figcaption{
+    margin-top:1.1rem;font-size:.9rem;color:#b9c2cf;letter-spacing:.02em;
+  }
+  .shot figcaption b{color:var(--gold);font-weight:600}
+
+  /* ---------- pillars ---------- */
+  .pillars{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:clamp(2rem,5vw,5rem);margin-top:3.2rem}
+  .pillar{padding:0 0 2rem;border-bottom:1px solid var(--line)}
+  .pillar h3{font-family:var(--serif);font-size:1.6rem;font-weight:600;margin-bottom:.6rem;display:flex;gap:.7rem;align-items:baseline}
+  .pillar h3 svg{flex:none;transform:translateY(2px)}
+  .pillar p{color:var(--ink-3);font-size:1rem}
+  .quote{
+    font-family:var(--serif);font-size:clamp(1.5rem,2.6vw,2.1rem);font-weight:500;
+    line-height:1.3;color:var(--navy);align-self:center;
+  }
+  .quote::before{content:"« "}.quote::after{content:" »"}
+  @media (max-width:860px){.pillars{grid-template-columns:1fr}}
+
+  /* ---------- cta ---------- */
+  .cta{background:var(--paper-2);text-align:left}
+  .cta .wrap{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:3rem;align-items:center}
+  .cta p{color:var(--ink-3);margin-top:1.2rem;max-width:34rem}
+  .cta .box{justify-self:end}
+  .cta .note{font-size:.85rem;color:var(--ink-3);margin-top:1rem;letter-spacing:.02em}
+  @media (max-width:860px){.cta .wrap{grid-template-columns:1fr}.cta .box{justify-self:start}}
+
+  /* ---------- footer ---------- */
+  footer{
+    padding:2.4rem clamp(1.25rem,6vw,6rem);border-top:1px solid var(--line);
+    display:flex;flex-wrap:wrap;gap:1rem 2.5rem;align-items:center;justify-content:space-between;
+    font-size:.82rem;color:var(--ink-3);
+  }
+  footer .mark{display:flex;align-items:center;gap:.6rem}
+  footer svg{width:22px;height:22px;border-radius:5px}
+</style>
+</head>
+<body>
+
+<header id="hd">
+  <a class="brand" href="#top" aria-label="Aegis Core">
+    <svg viewBox="0 0 512 512" aria-hidden="true"><rect width="512" height="512" rx="96" fill="#f4f6f9"/><path d="M256 48 C 296 78, 352 92, 408 100 L 408 264 C 408 366, 344 432, 256 464 C 168 432, 104 366, 104 264 L 104 100 C 160 92, 216 78, 256 48 Z" fill="#2f4b6e"/><circle cx="256" cy="112" r="14" fill="#c9a227"/><text x="256" y="396" font-size="290" font-weight="800" text-anchor="middle" fill="#ffffff" font-family="Arial,Helvetica,sans-serif">A</text></svg>
+    <span class="word">Aegis&nbsp;<em>Core</em></span>
+  </a>
+  <nav>
+    <a href="#constat" data-fr="Constat" data-en="The problem">Constat</a>
+    <a href="#produit" data-fr="Produit" data-en="Product">Produit</a>
+    <a href="#preuve" data-fr="Preuve" data-en="Evidence">Preuve</a>
+    <div class="lang" role="group" aria-label="Langue / Language">
+      <button id="btn-fr" aria-pressed="true">FR</button>
+      <button id="btn-en" aria-pressed="false">EN</button>
+    </div>
+  </nav>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <span class="side" data-fr="Secret professionnel — Art. 66-5, loi du 31 déc. 1971" data-en="Professional secrecy — Art. 66-5, Act of 31 Dec. 1971">Secret professionnel — Art. 66-5, loi du 31 déc. 1971</span>
+    <div class="wrap hero-grid">
+      <div>
+        <p class="eyebrow rv" data-fr="Appliance IA souveraine pour cabinets d'avocats" data-en="Sovereign AI appliance for law firms">Appliance IA souveraine pour cabinets d'avocats</p>
+        <h1 class="rv d1" data-fr="L'intelligence artificielle, sous le sceau du secret professionnel." data-en="Artificial intelligence, under the seal of professional secrecy.">L'intelligence artificielle, sous le sceau du <span class="g">secret professionnel</span>.</h1>
+        <p class="lead rv d2" data-fr="Aegis Core est un boîtier qui s'installe dans votre cabinet et fait tourner l'IA entièrement sur place. Aucune donnée ne quitte vos murs. Chaque consultation est inscrite dans un registre d'audit opposable." data-en="Aegis Core is an appliance installed inside your firm that runs AI entirely on premises. No data ever leaves your walls. Every query is recorded in a tamper-evident audit ledger.">Aegis Core est un boîtier qui s'installe dans votre cabinet et fait tourner l'IA entièrement sur place. Aucune donnée ne quitte vos murs. Chaque consultation est inscrite dans un registre d'audit opposable.</p>
+        <div class="cta-row rv d3">
+          <a class="btn solid" href="mailto:contact@aegiscore-eu.com?subject=Demande%20de%20d%C3%A9monstration%20Aegis%20Core" data-fr="Demander une démonstration" data-en="Request a demonstration">Demander une démonstration</a>
+          <a class="btn ghost" href="#produit" data-fr="Découvrir le fonctionnement" data-en="See how it works">Découvrir le fonctionnement</a>
+        </div>
+      </div>
+      <div class="hero-meta rv d2">
+        <div><b>100&nbsp;%</b><span data-fr="local — zéro envoi vers le cloud" data-en="on-premises — zero cloud transfer">local — zéro envoi vers le cloud</span></div>
+        <div><b>24&nbsp;B</b><span data-fr="modèle Mistral quantifié, en français" data-en="quantized Mistral model, fluent in French">modèle Mistral quantifié, en français</span></div>
+        <div><b>SHA-256</b><span data-fr="chaque question, chaque réponse : une empreinte" data-en="every question and answer fingerprinted">chaque question, chaque réponse : une empreinte</span></div>
+      </div>
+    </div>
+  </section>
+
+  <div class="ledger" aria-hidden="true">
+    <span class="rule"></span><code>a3f9…c21e</code><span class="tick"></span><code>7b04…88ad</code><span class="tick"></span><code>e551…0f9c</code><span class="rule"></span>
+  </div>
+
+  <!-- PROBLEM -->
+  <section id="constat">
+    <div class="wrap">
+      <p class="eyebrow rv" data-fr="Le constat" data-en="The problem">Le constat</p>
+      <h2 class="rv d1" data-fr="L'IA est arrivée au cabinet. Le secret, lui, n'a pas été consulté." data-en="AI has entered the firm. Professional secrecy was never consulted.">L'IA est arrivée au cabinet. Le secret, lui, n'a pas été consulté.</h2>
+      <div class="prob-list">
+        <div class="prob rv">
+          <span class="num">I</span>
+          <h3 data-fr="Chaque prompt envoyé au cloud est une confiance qui sort du cabinet" data-en="Every prompt sent to the cloud is a confidence leaving the firm">Chaque prompt envoyé au cloud est une confiance qui sort du cabinet</h3>
+          <p data-fr="Copier un dossier dans un service en ligne, même « sécurisé », c'est transmettre à un tiers des informations couvertes par le secret professionnel (art. 66-5 de la loi du 31 décembre 1971) et par le RGPD." data-en="Pasting a client file into an online service — even a “secure” one — means disclosing to a third party information covered by professional secrecy (art. 66-5 of the Act of 31 December 1971) and by the GDPR.">Copier un dossier dans un service en ligne, même « sécurisé », c'est transmettre à un tiers des informations couvertes par le secret professionnel (art. 66-5 de la loi du 31 décembre 1971) et par le RGPD.</p>
+        </div>
+        <div class="prob rv d1">
+          <span class="num">II</span>
+          <h3 data-fr="« On n'utilise pas l'IA » n'est plus une politique, c'est un angle mort" data-en="“We don't use AI” is no longer a policy — it's a blind spot">« On n'utilise pas l'IA » n'est plus une politique, c'est un angle mort</h3>
+          <p data-fr="Les collaborateurs utilisent déjà des outils grand public, sans cadre ni traçabilité. Interdire sans offrir d'alternative revient à perdre à la fois la productivité et le contrôle." data-en="Associates already use consumer tools, without guardrails or traceability. Banning AI without offering an alternative means losing both productivity and control.">Les collaborateurs utilisent déjà des outils grand public, sans cadre ni traçabilité. Interdire sans offrir d'alternative revient à perdre à la fois la productivité et le contrôle.</p>
+        </div>
+        <div class="prob rv d2">
+          <span class="num">III</span>
+          <h3 data-fr="Le règlement IA exige de la documentation. Qui la produira ?" data-en="The AI Act demands documentation. Who will produce it?">Le règlement IA exige de la documentation. Qui la produira ?</h3>
+          <p data-fr="Le règlement (UE) 2024/1689 impose traçabilité, gouvernance des données et documentation technique. Sans journal probant, démontrer sa conformité devient un exercice de mémoire." data-en="Regulation (EU) 2024/1689 requires traceability, data governance and technical documentation. Without reliable records, demonstrating compliance becomes an exercise in memory.">Le règlement (UE) 2024/1689 impose traçabilité, gouvernance des données et documentation technique. Sans journal probant, démontrer sa conformité devient un exercice de mémoire.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCT -->
+  <section class="product" id="produit">
+    <div class="wrap">
+      <p class="eyebrow rv" data-fr="Le produit" data-en="The product">Le produit</p>
+      <h2 class="rv d1" data-fr="Un boîtier dans votre cabinet. Pas une promesse dans un contrat cloud." data-en="A device in your office. Not a promise in a cloud contract.">Un boîtier dans votre cabinet. Pas une promesse dans un contrat cloud.</h2>
+      <p class="lead rv d2" data-fr="Aegis Core embarque un grand modèle de langage européen, quantifié et optimisé, sur du matériel installé dans vos locaux. Le réseau du cabinet suffit : aucune connexion sortante n'est nécessaire au fonctionnement." data-en="Aegis Core ships a European large language model, quantized and optimized, on hardware installed in your premises. Your office network is enough: no outbound connection is required to operate.">Aegis Core embarque un grand modèle de langage européen, quantifié et optimisé, sur du matériel installé dans vos locaux. Le réseau du cabinet suffit : aucune connexion sortante n'est nécessaire au fonctionnement.</p>
+      <div class="steps">
+        <div class="step rv">
+          <span class="k">01</span>
+          <h3 data-fr="On branche" data-en="Plug it in">On branche</h3>
+          <p data-fr="L'appliance rejoint le réseau local du cabinet. Installation accompagnée, sans compétence informatique requise côté cabinet." data-en="The appliance joins the firm's local network. Assisted installation, no in-house IT skills required.">L'appliance rejoint le réseau local du cabinet. Installation accompagnée, sans compétence informatique requise côté cabinet.</p>
+        </div>
+        <div class="step rv d1">
+          <span class="k">02</span>
+          <h3 data-fr="On interroge" data-en="Ask">On interroge</h3>
+          <p data-fr="Les avocats dialoguent avec l'IA depuis une console web interne — synthèses, recherches, rédaction — en français comme en anglais." data-en="Lawyers talk to the AI from an internal web console — summaries, research, drafting — in French and English alike.">Les avocats dialoguent avec l'IA depuis une console web interne — synthèses, recherches, rédaction — en français comme en anglais.</p>
+        </div>
+        <div class="step rv d2">
+          <span class="k">03</span>
+          <h3 data-fr="Tout est consigné" data-en="Everything is recorded">Tout est consigné</h3>
+          <p data-fr="Chaque question et chaque réponse laissent une empreinte cryptographique dans un registre chaîné, prêt pour l'horodatage qualifié eIDAS." data-en="Every question and answer leaves a cryptographic fingerprint in a chained ledger, ready for eIDAS qualified timestamping.">Chaque question et chaque réponse laissent une empreinte cryptographique dans un registre chaîné, prêt pour l'horodatage qualifié eIDAS.</p>
+        </div>
+      </div>
+      <div class="specs rv">
+        <div><b>Mistral 24B</b><span data-fr="modèle européen quantifié" data-en="quantized European model">modèle européen quantifié</span></div>
+        <div><b>62 tok/s</b><span data-fr="génération mesurée, mono-utilisateur" data-en="measured generation, single user">génération mesurée, mono-utilisateur</span></div>
+        <div><b>0 octet</b><span data-fr="sortant pendant l'usage" data-en="outbound during operation">sortant pendant l'usage</span></div>
+        <div><b>RFC 3161</b><span data-fr="ancrage horodaté du registre" data-en="ledger timestamp anchoring">ancrage horodaté du registre</span></div>
+      </div>
+      <figure class="shot rv">
+        <div class="frame">
+          <div class="bar" aria-hidden="true"><i></i><i></i><i></i><span class="url">https://console.aegis.local</span></div>
+          <img src="console-demo.png" width="1180" height="839" loading="lazy"
+               alt="Console Aegis Core : assistant IA local, chaque échange scellé dans le registre d'audit"
+               data-alt-fr="Console Aegis Core : assistant IA local, chaque échange scellé dans le registre d'audit"
+               data-alt-en="Aegis Core console: local AI assistant, every exchange sealed in the audit ledger">
+        </div>
+        <figcaption><b data-fr="Console réelle, pas une maquette" data-en="The real console, not a mockup">Console réelle, pas une maquette</b><span data-fr=" — la question et la réponse portent leurs numéros d'inscription au registre (n° 12 et 13)." data-en=" — question and answer carry their ledger entry numbers (No. 12 and 13)."> — la question et la réponse portent leurs numéros d'inscription au registre (n° 12 et 13).</span></figcaption>
+    </figure>
+    </div>
+  </section>
+
+  <!-- EVIDENCE -->
+  <section id="preuve">
+    <div class="wrap">
+      <p class="eyebrow rv" data-fr="La preuve" data-en="The evidence">La preuve</p>
+      <h2 class="rv d1" data-fr="Ce qui distingue Aegis Core : la conformité n'est pas affirmée, elle est enregistrée." data-en="What sets Aegis Core apart: compliance is not claimed — it is recorded.">Ce qui distingue Aegis Core : la conformité n'est pas affirmée, elle est enregistrée.</h2>
+      <div class="pillars">
+        <div>
+          <div class="pillar rv">
+            <h3><svg width="15" height="15" viewBox="0 0 15 15" aria-hidden="true"><rect x="1" y="1" width="13" height="13" fill="none" stroke="#c9a227" stroke-width="1.6" transform="rotate(45 7.5 7.5)"/></svg><span data-fr="Registre d'audit chaîné" data-en="Chained audit ledger">Registre d'audit chaîné</span></h3>
+            <p data-fr="Chaque événement est haché (SHA-256) et lié au précédent : toute altération rétroactive devient détectable. Le registre se vérifie seul, sans nous faire confiance." data-en="Every event is hashed (SHA-256) and linked to the previous one: any retroactive tampering becomes detectable. The ledger verifies itself — no need to take our word for it.">Chaque événement est haché (SHA-256) et lié au précédent : toute altération rétroactive devient détectable. Le registre se vérifie seul, sans nous faire confiance.</p>
+          </div>
+          <div class="pillar rv d1">
+            <h3><svg width="15" height="15" viewBox="0 0 15 15" aria-hidden="true"><rect x="1" y="1" width="13" height="13" fill="none" stroke="#c9a227" stroke-width="1.6" transform="rotate(45 7.5 7.5)"/></svg><span data-fr="Conçu pour le RGPD et le règlement IA" data-en="Designed for GDPR and the AI Act">Conçu pour le RGPD et le règlement IA</span></h3>
+            <p data-fr="Journalisation, minimisation des données et documentation technique font partie de l'architecture — pas d'un PDF ajouté après coup. Les éléments probants existent avant que l'audit n'ait lieu." data-en="Logging, data minimisation and technical documentation are part of the architecture — not a PDF bolted on afterwards. The evidence exists before the audit happens.">Journalisation, minimisation des données et documentation technique font partie de l'architecture — pas d'un PDF ajouté après coup. Les éléments probants existent avant que l'audit n'ait lieu.</p>
+          </div>
+          <div class="pillar rv d2">
+            <h3><svg width="15" height="15" viewBox="0 0 15 15" aria-hidden="true"><rect x="1" y="1" width="13" height="13" fill="none" stroke="#c9a227" stroke-width="1.6" transform="rotate(45 7.5 7.5)"/></svg><span data-fr="Souveraineté réelle, pas contractuelle" data-en="Real sovereignty, not contractual">Souveraineté réelle, pas contractuelle</span></h3>
+            <p data-fr="Le modèle tourne sur votre matériel, dans vos locaux. Coupez internet : Aegis Core continue de répondre. La maîtrise des données ne dépend d'aucune clause, elle dépend de la physique." data-en="The model runs on your hardware, in your offices. Pull the internet plug: Aegis Core keeps answering. Control over data depends on no clause — it depends on physics.">Le modèle tourne sur votre matériel, dans vos locaux. Coupez internet : Aegis Core continue de répondre. La maîtrise des données ne dépend d'aucune clause, elle dépend de la physique.</p>
+          </div>
+        </div>
+        <p class="quote rv d1" data-fr="Un avocat ne devrait jamais avoir à choisir entre la puissance de l'IA et le serment qu'il a prêté." data-en="A lawyer should never have to choose between the power of AI and the oath they swore.">Un avocat ne devrait jamais avoir à choisir entre la puissance de l'IA et le serment qu'il a prêté.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="ledger" aria-hidden="true">
+    <span class="rule"></span><code>9d1a…4b77</code><span class="tick"></span><code>02fe…c390</code><span class="tick"></span><code>bb68…1de4</code><span class="rule"></span>
+  </div>
+
+  <!-- CTA -->
+  <section class="cta" id="contact">
+    <div class="wrap">
+      <div class="rv">
+        <p class="eyebrow" data-fr="Prochaine étape" data-en="Next step">Prochaine étape</p>
+        <h2 data-fr="Voyez-le tourner dans les conditions du réel." data-en="See it run in real-world conditions.">Voyez-le tourner dans les conditions du réel.</h2>
+        <p data-fr="Nous organisons des démonstrations sur appliance physique, hors ligne, pour les cabinets partenaires du programme pilote. Réponse sous 48 heures." data-en="We run demonstrations on a physical appliance, offline, for firms joining the pilot programme. We reply within 48 hours.">Nous organisons des démonstrations sur appliance physique, hors ligne, pour les cabinets partenaires du programme pilote. Réponse sous 48 heures.</p>
+      </div>
+      <div class="box rv d1">
+        <a class="btn solid" href="mailto:contact@aegiscore-eu.com?subject=Programme%20pilote%20Aegis%20Core" data-fr="Rejoindre le programme pilote" data-en="Join the pilot programme">Rejoindre le programme pilote</a>
+        <p class="note">contact@aegiscore-eu.com</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="mark">
+    <svg viewBox="0 0 512 512" aria-hidden="true"><rect width="512" height="512" rx="96" fill="#f4f6f9"/><path d="M256 48 C 296 78, 352 92, 408 100 L 408 264 C 408 366, 344 432, 256 464 C 168 432, 104 366, 104 264 L 104 100 C 160 92, 216 78, 256 48 Z" fill="#2f4b6e"/><circle cx="256" cy="112" r="14" fill="#c9a227"/><text x="256" y="396" font-size="290" font-weight="800" text-anchor="middle" fill="#ffffff" font-family="Arial,Helvetica,sans-serif">A</text></svg>
+    <span>© 2026 Aegis Core</span>
+  </div>
+  <span data-fr="Appliance IA souveraine — conçue en Europe, pour les professions du secret." data-en="Sovereign AI appliance — designed in Europe, for the professions of secrecy.">Appliance IA souveraine — conçue en Europe, pour les professions du secret.</span>
+</footer>
+
+<script>
+(function(){
+  /* body reveal */
+  document.body.classList.add('reveal');
+
+  /* header hide/show on scroll */
+  var hd=document.getElementById('hd'),lastY=window.scrollY;
+  window.addEventListener('scroll',function(){
+    var y=window.scrollY;
+    if(y>120&&y>lastY){hd.classList.remove('in');hd.classList.add('out');}
+    else if(y<lastY){hd.classList.remove('out');hd.classList.add('in');}
+    lastY=y;
+  },{passive:true});
+
+  /* scroll reveals */
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('on');io.unobserve(e.target);}});
+  },{threshold:.12});
+  document.querySelectorAll('.rv').forEach(function(el){io.observe(el);});
+
+  /* language toggle */
+  var KEY='aegis-lang';
+  function setLang(l){
+    document.documentElement.lang=l;
+    document.querySelectorAll('[data-fr]').forEach(function(el){
+      var t=el.getAttribute('data-'+l);if(t!=null){el.textContent=t;}
+    });
+    document.querySelectorAll('[data-alt-fr]').forEach(function(el){
+      var t=el.getAttribute('data-alt-'+l);if(t!=null){el.setAttribute('alt',t);}
+    });
+    /* restore styled span in hero h1 */
+    var h1=document.querySelector('h1');
+    if(h1){
+      if(l==='fr'){h1.innerHTML="L'intelligence artificielle, sous le sceau du <span class=\"g\">secret professionnel</span>.";}
+      else{h1.innerHTML="Artificial intelligence, under the seal of <span class=\"g\">professional secrecy</span>.";}
+    }
+    document.getElementById('btn-fr').setAttribute('aria-pressed',l==='fr');
+    document.getElementById('btn-en').setAttribute('aria-pressed',l==='en');
+    document.title=l==='fr'
+      ?"Aegis Core — L'IA sous le sceau du secret professionnel"
+      :"Aegis Core — AI under the seal of professional secrecy";
+    try{localStorage.setItem(KEY,l);}catch(e){}
+  }
+  document.getElementById('btn-fr').addEventListener('click',function(){setLang('fr');});
+  document.getElementById('btn-en').addEventListener('click',function(){setLang('en');});
+  var saved=null;try{saved=localStorage.getItem(KEY);}catch(e){}
+  if(saved==='en'){setLang('en');}
+})();
+</script>
+</body>
+</html>
